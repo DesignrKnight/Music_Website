@@ -97,8 +97,6 @@ def delete_product(id):
 
   return product_schema.jsonify(product)
 
-@app.route('/uploader')
-
 @app.route("/")
 def home():
     return render_template("index.html")
