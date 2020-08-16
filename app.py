@@ -58,11 +58,11 @@ def add_product():
   
 
 # Get All Products
-@app.route('/product', methods=['GET'])
+@app.route('/', methods=['GET'])
 def get_products():
   all_products = Product.query.all()
   result = products_schema.dump(all_products)
-  return render_template('playlist.html', title="Products" ,  result = result )
+  return render_template('index.html', title="Products" ,  result = result )
 
 
 # Get Single Products
@@ -97,10 +97,6 @@ def delete_product(id):
   db.session.commit()
 
   return product_schema.jsonify(product)
-
-@app.route("/")
-def home():
-    return render_template("index.html")
 
 # Run Server
 if __name__ == '__main__':

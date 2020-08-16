@@ -86,11 +86,11 @@ transform: translate(-50%,-50%);
 .btn:hover{
 	background-color: #fff;
 	color:#000;
-
 }
 
-
-
+section{
+	text-align: center;
+}
 
 
 
