@@ -1,0 +1,16 @@
+<section>
+    <div class="container" style="text-align: center;">
+
+
+        <h1>PLAYLIST</h1>
+        
+        
+        {% for d in result %}
+        <div>
+            <h1>Name: {{ d.name }}<br>Artist: {{ d.artist }}
+                <br>Album: {{ d.album }}</h1>
+        </div>
+        {% endfor %}
+
+    </div>
+</section>
