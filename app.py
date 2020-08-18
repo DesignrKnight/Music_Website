@@ -2,7 +2,8 @@ from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy 
 from flask_marshmallow import Marshmallow 
 import os
-from flask import url_for, redirect, render_template, request
+from flask import url_for, redirect, render_template, request, send_from_directory
+
 
 app = Flask(__name__)
 app.static_folder = 'static'
@@ -57,12 +58,24 @@ def add_product():
   return product_schema.jsonify(new_product)
   
 
-# Get All Products
+#Upload Song
+@app.route('/uploadMusic')
+def uploadMusic():
+  return render_template("upload.html")
+
+# Get Home
 @app.route('/', methods=['GET'])
-def get_products():
+def get_home_products():
   all_products = Product.query.all()
   result = products_schema.dump(all_products)
   return render_template('index.html', title="Products" ,  result = result )
+
+# Get All Products
+@app.route('/product', methods=['GET'])
+def get_products():
+  all_products = Product.query.all()
+  result = products_schema.dump(all_products)
+  return jsonify(result)
 
 
 # Get Single Products
@@ -97,6 +110,32 @@ def delete_product(id):
   db.session.commit()
 
   return product_schema.jsonify(product)
+
+@app.route("/upload", methods=["POST"])
+def upload():
+  
+    target = os.path.join(basedir, "imageuploads/")
+    print(target)
+    if not os.path.isdir(target):
+        os.mkdir(target)
+    print(request.files.getlist("file"))
+    for upload in request.files.getlist("file"):
+        print(upload)
+        print("{} is the file name".format(upload.filename))
+        filename = upload.filename
+        ext = os.path.splitext(filename)[1]
+        if (ext == ".jpg") or (ext == ".png"):
+            print("File supported moving on...")
+        else:
+            print("File not supported")
+            return
+        destination = "/".join([target, filename])
+        print("Accept incoming file:", filename)
+        print("Save it to:", destination)
+        upload.save(destination)
+
+    return render_template("complete.html", image_name=filename)
+
 
 # Run Server
 if __name__ == '__main__':
