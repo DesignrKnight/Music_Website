@@ -8,7 +8,6 @@ from flask import url_for, redirect, render_template, request, send_from_directo
 app = Flask(__name__)
 app.static_folder = 'static'
 
-
 # Init app
 app = Flask(__name__)
 basedir = os.path.abspath(os.path.dirname(__file__))
@@ -27,17 +26,19 @@ class Product(db.Model):
   description = db.Column(db.String(200))
   artist = db.Column(db.String)
   album = db.Column(db.String)
+  filename =db.Column(db.String)
 
-  def __init__(self, name, description, artist, album):
+  def __init__(self, name, description, artist, album,filename):
     self.name = name
     self.description = description
     self.artist = artist
     self.album = album
+    self.filename = filename
 
 # Product Schema
 class ProductSchema(ma.Schema):
   class Meta:
-    fields = ('id', 'name', 'description', 'artist', 'album')
+    fields = ('id', 'name', 'description', 'artist', 'album','filename')
 
 # Init schema
 product_schema = ProductSchema()
@@ -50,6 +51,7 @@ def add_product():
   description = request.json['description']
   artist = request.json['artist']
   album = request.json['album']
+  
 
   new_product = Product(name, description, artist, album)
   db.session.add(new_product)
@@ -113,6 +115,11 @@ def delete_product(id):
 
 @app.route("/upload", methods=["POST"])
 def upload():
+    print("Praisy:"+str(request.form))
+    name = request.form["Sname"]
+    artist = request.form["Aname"]
+    album = request.form["name"]
+    description = request.form["Dname"]
   
     target = os.path.join(basedir, "imageuploads/")
     print(target)
@@ -133,6 +140,10 @@ def upload():
         print("Accept incoming file:", filename)
         print("Save it to:", destination)
         upload.save(destination)
+
+    new_product = Product(name, description, artist, album, filename)
+    db.session.add(new_product)
+    db.session.commit()
 
     return render_template("complete.html", image_name=filename)
 
