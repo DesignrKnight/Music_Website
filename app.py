@@ -46,21 +46,6 @@ class ProductSchema(ma.Schema):
 product_schema = ProductSchema()
 products_schema = ProductSchema(many=True)
 
-# Create a Product
-@app.route('/product', methods=['POST'])
-def add_product():
-  name = request.json['name']
-  description = request.json['description']
-  artist = request.json['artist']
-  album = request.json['album']
-  
-
-  new_product = Product(name, description, artist, album)
-  db.session.add(new_product)
-  db.session.commit()
-
-  return product_schema.jsonify(new_product)
-  
 
 #Upload Song
 @app.route('/uploadMusic')
@@ -112,7 +97,6 @@ def delete_product(id):
   product = Product.query.get(id)
   db.session.delete(product)
   db.session.commit()
-
   return product_schema.jsonify(product)
 
 @app.route("/upload", methods=["POST"])

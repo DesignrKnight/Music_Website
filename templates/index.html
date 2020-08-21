@@ -5,9 +5,12 @@
   <title>MUSIC WEBSITE</title>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
-
   <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+    integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
+    integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV"
+    crossorigin="anonymous"></script>
 
 </head>
 
@@ -37,36 +40,33 @@
   </header>
 
   <section>
-    
+
     <div class="container">
 
 
       <h1>PLAYLIST</h1>
-      
-       <p>{{ result }}</p>
-       
+
       {% for d in result %}
-      <div>
-        <img src="../static/imageuploads/{{d.filename}}"  />
-    
-        <h1>Name: {{ d.name }}<br>Artist: {{ d.artist }}
-          <br>Album: {{ d.album }}</h1>
-          <h1>Album: {{ d.audio }}</h1>
-          <h1>Album: {{ d.filename }}</h1>
-          <audio controls>
-              <source src= "../static/musicuploads/{{ d.audio }}" type="audio/mpeg">
-          </audio>
+      <div class="card my-4 mx-10" style="width: 500px;">
+        <img src="../static/imageuploads/{{d.filename}}" class="card-img-top" alt="...">
+        <div class="card-body">
+          <div class="card-text">
+            <h1> {{ d.name }}</h1>
+            <p>{{d.description}}</p>
+            <h3>Artist: {{ d.artist }}
+              <br>Album: {{ d.album }}</h3>
+            <audio controls>
+              <source src="../static/musicuploads/{{ d.audio }}" type="audio/mpeg">
+            </audio>
+          </div>
+        </div>
       </div>
       {% endfor %}
 
     </div>
   </section>
-  <section>
-    <div class="container" >
-     <h1 id="02"> </h1>
-    </div>
-  </section>
-  <script src ="{{ url_for('static', filename='js/index.js') }}"></script>
+  
+  <script src="{{ url_for('static', filename='js/index.js') }}"></script>
 </body>
 
 </html>
