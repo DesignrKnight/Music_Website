@@ -64,9 +64,9 @@ def get_home_products():
 def get_products():
   all_products = Product.query.all()
   result = products_schema.dump(all_products)
-  return jsonify(result)
-
-
+  
+  return render_template('playlist.html', result = result )
+   
 # Get Single Products
 @app.route('/product/<id>', methods=['GET']) 
 def get_product(id):
@@ -155,13 +155,6 @@ def upload():
     db.session.commit()
 
     return render_template("complete.html", image_name=filename , audio_name=audio)
-
-
-@app.route('/upload/<filename>')
-def send_image(filename):
-    return send_from_directory("static/imageuploads/", filename)
-
-
 
 # Run Server
 if __name__ == '__main__':

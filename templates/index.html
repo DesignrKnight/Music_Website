@@ -6,6 +6,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
+
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
     integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
@@ -16,14 +17,14 @@
 
 <body>
   <header>
-    <div class="main">
+    <div class="main py-3">
       <div class="logo">
         <img src="../static/images/logo.png" width="60" height="60" />
       </div>
       <ul>
-        <li class="active"><a href="#">HOME</a>
+        <li class="active"><a href="/">HOME</a>
         </li>
-        <li><a href="#">PLAYLIST</a>
+        <li><a href="/product">PLAYLIST</a>
         </li>
       </ul>
     </div>
@@ -32,8 +33,8 @@
     </div>
 
     <div class="button">
-      <a href="#" class="btn">LISTEN NOW</a>
-      <a href="#" class="btn">UPLOAD YOU SONG</a>
+      <a href="#" class="btn btn-light"> LISTEN NOW </a>
+      <a href="/uploadMusic" class="btn btn-light"> UPLOAD YOUR SONG</a>
 
     </div>
 
@@ -41,31 +42,32 @@
 
   <section>
 
-    <div class="container">
-
-
+    <div class="container my-4">
       <h1>PLAYLIST</h1>
 
       {% for d in result %}
-      <div class="card my-4 mx-10" style="width: 500px;">
-        <img src="../static/imageuploads/{{d.filename}}" class="card-img-top" alt="...">
-        <div class="card-body">
-          <div class="card-text">
-            <h1> {{ d.name }}</h1>
-            <p>{{d.description}}</p>
-            <h3>Artist: {{ d.artist }}
-              <br>Album: {{ d.album }}</h3>
-            <audio controls>
-              <source src="../static/musicuploads/{{ d.audio }}" type="audio/mpeg">
-            </audio>
-          </div>
+      <div class="row my-4">
+        <div class="col-md-6 ">
+          <img src="../static/imageuploads/{{d.filename}}" width="500" height="400" alt="...">
+        </div>
+        <div class="col-md-6 my-5 ">
+          <h1> {{ d.name }}</h1>
+          <p>{{ d.description }}</p>
+          <h3>Artist: {{  d.artist }}
+            <br>Album: {{  d.album }}</h3>
+          <audio controls>
+            <source src="../static/musicuploads/{{ d.audio }}" type="audio/mpeg">
+          </audio>
+          <a href="../static/musicuploads/{{ d.audio }}" download="song" > <button class="btn btn-primary" style="margin: 10%;">Download Music</button></a>
+         
         </div>
       </div>
       {% endfor %}
 
-    </div>
+      <a href="/uploadMusic" class="btn btn-secondary"> UPLOAD YOUR SONG </a>
+
   </section>
-  
+
   <script src="{{ url_for('static', filename='js/index.js') }}"></script>
 </body>
 

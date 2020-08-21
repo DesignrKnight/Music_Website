@@ -1,16 +1,29 @@
-<section>
-    <div class="container" style="text-align: center;">
+{% block content %}
+
+    <div class="container">
 
 
         <h1>PLAYLIST</h1>
-        
-        
-        {% for d in result %}
-        <div>
-            <h1>Name: {{ d.name }}<br>Artist: {{ d.artist }}
-                <br>Album: {{ d.album }}</h1>
-        </div>
-        {% endfor %}
 
-    </div>
-</section>
+        {% for d in result %}
+        <div class="row my-4">
+            <div class="col-md-6 ">
+                <img src="../static/imageuploads/{{d.filename}}" width="300" height="200" alt="...">
+            </div>
+            <div class="col-md-6 my-5 ">
+                <h3> {{ d.name }}</h3>
+                <p>{{ d.description }}</p>
+                <p>Artist: {{  d.artist }}
+                    <br>Album: {{  d.album }}<p>
+                <audio controls>
+                    <source src="../static/musicuploads/{{ d.audio }}" type="audio/mpeg">
+                </audio>
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+
+
+{% endblock %}
