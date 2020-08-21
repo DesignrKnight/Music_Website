@@ -5,6 +5,8 @@ function htmlToElement(html) {
     template.innerHTML = html;
     return template.content.firstChild;
 }
+//{{ url_for('static/imageuploads/', filename=${data.filename}) }}
+//<img src="localhost:5000/static/imageuploads/${data.filename}" >
 
 arr=['Hello.mp3','whois.mp3','tata.mp3']
 var i=0
@@ -14,13 +16,15 @@ fetch('http://127.0.0.1:5000/product').then(res => res.json()).then(res=>{
         var card=`
 <div class="p-4 md:w-3/3">
 <div class="h-full border-2 border-gray-200 rounded-lg overflow-hidden">
-  <img class="lg:h-48 md:h-36 w-full object-cover object-center" src="https://dummyimage.com/720x400" alt="blog">
+  <img src="/static/imageloads/${d.filename}" >
   <audio controls>
-  <source src="../static/music/${arr[i++]}" type="audio/mpeg">
+  <source src="/static/musicploads/${d.audio}" type="audio/mpeg">
   </audio>
   <div class="p-6">
     <h2 class="tracking-widest text-xs title-font font-medium text-gray-500 mb-1">NAME</h2>
     <h1 class="title-font text-lg font-medium text-gray-900 mb-3">${data.name}</h1>
+    <h3>${data.album}</h3>
+    <h3>${data.artist}</h3>
     <p class="leading-relaxed mb-3">${data.description}</p>
     <div class="flex items-center flex-wrap ">
       <a class="text-orange-500 inline-flex items-center md:mb-2 lg:mb-0">Learn More

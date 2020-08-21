@@ -26,19 +26,21 @@ class Product(db.Model):
   description = db.Column(db.String(200))
   artist = db.Column(db.String)
   album = db.Column(db.String)
-  filename =db.Column(db.String)
+  filename = db.Column(db.String)
+  audio = db.Column(db.String)
 
-  def __init__(self, name, description, artist, album,filename):
+  def __init__(self, name, description, artist, album, audio, filename):
     self.name = name
     self.description = description
     self.artist = artist
     self.album = album
     self.filename = filename
+    self.audio = audio
 
 # Product Schema
 class ProductSchema(ma.Schema):
   class Meta:
-    fields = ('id', 'name', 'description', 'artist', 'album','filename')
+    fields = ('id', 'name', 'description', 'artist', 'album','filename','audio')
 
 # Init schema
 product_schema = ProductSchema()
@@ -120,14 +122,36 @@ def upload():
     artist = request.form["Aname"]
     album = request.form["name"]
     description = request.form["Dname"]
+
+    target = os.path.join(basedir, "static/musicuploads/")
+    print(target)
+    if not os.path.isdir(target):
+        os.mkdir(target)
+    print("ListAudio"+str(request.files.getlist("audiofile")))
+    for upload in request.files.getlist("audiofile"):
+        print("PraisyUpload1"+str(upload))
+        #print("{} is the file name".format(upload.audio))
+        audio = upload.filename
+        ext = os.path.splitext(audio)[1]
+        if (ext == ".mp3"):
+            print("File supported moving on...")
+        else:
+            print("File not supported")
+            return
+        
+        destination = "/".join([target, audio])
+        print("Accept incoming file:", audio)
+        print("Save it to:", destination)
+        upload.save(destination)
+
   
-    target = os.path.join(basedir, "imageuploads/")
+    target = os.path.join(basedir, "static/imageuploads/")
     print(target)
     if not os.path.isdir(target):
         os.mkdir(target)
     print(request.files.getlist("file"))
     for upload in request.files.getlist("file"):
-        print(upload)
+        print("PraisyUpload1"+str(upload))
         print("{} is the file name".format(upload.filename))
         filename = upload.filename
         ext = os.path.splitext(filename)[1]
@@ -136,16 +160,23 @@ def upload():
         else:
             print("File not supported")
             return
+            
         destination = "/".join([target, filename])
         print("Accept incoming file:", filename)
         print("Save it to:", destination)
         upload.save(destination)
-
-    new_product = Product(name, description, artist, album, filename)
+        
+    new_product = Product(name, description, artist, album, audio, filename)
     db.session.add(new_product)
     db.session.commit()
 
-    return render_template("complete.html", image_name=filename)
+    return render_template("complete.html", image_name=filename , audio_name=audio)
+
+
+@app.route('/upload/<filename>')
+def send_image(filename):
+    return send_from_directory("static/imageuploads/", filename)
+
 
 
 # Run Server
