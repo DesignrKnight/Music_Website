@@ -3,6 +3,8 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow 
 import os
 from flask import url_for, redirect, render_template, request, send_from_directory
+from flask_wtf import FlaskForm 
+from wtforms_sqlalchemy.fields import QuerySelectField
 
 
 app = Flask(__name__)
@@ -14,6 +16,7 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 # Database
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, 'db.sqlite')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['SECRET_KEY'] = 'secret'
 # Init db
 db = SQLAlchemy(app)
 # Init ma
@@ -46,7 +49,6 @@ class ProductSchema(ma.Schema):
 product_schema = ProductSchema()
 products_schema = ProductSchema(many=True)
 
-
 #Upload Song
 @app.route('/uploadMusic')
 def uploadMusic():
@@ -64,9 +66,9 @@ def get_home_products():
 def get_products():
   all_products = Product.query.all()
   result = products_schema.dump(all_products)
-  
-  return render_template('playlist.html', result = result )
-   
+  return jsonify(result)
+
+
 # Get Single Products
 @app.route('/product/<id>', methods=['GET']) 
 def get_product(id):
@@ -155,6 +157,26 @@ def upload():
     db.session.commit()
 
     return render_template("complete.html", image_name=filename , audio_name=audio)
+
+
+def choice_query():
+    return Product.query
+
+class ChoiceForm(FlaskForm):
+    opts = QuerySelectField(query_factory=choice_query, allow_blank=True, get_label='name')
+
+@app.route('/search', methods=['GET', 'POST'])
+def search():
+    form = ChoiceForm()
+
+    form.opts.query = Product.query.filter()
+# view this in Page source
+    if form.validate_on_submit():
+       return '<h1>{}</h1>'.format(form.opts.data)
+
+    return render_template('search.html', form=form)
+
+
 
 # Run Server
 if __name__ == '__main__':

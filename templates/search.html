@@ -1,0 +1,37 @@
+<html>
+<head>
+    <title>Form</title>
+</head>
+<body>
+    <form action="/search" method="POST">
+        {{ form.csrf_token }}
+        {{ form.opts }}
+        <ul>
+            {% for error in form.opts.errors %}
+            <li style="color:red;">{{ error }}</li>
+            {% endfor %}
+        </ul>
+        <input type="submit">
+    </form>
+
+    
+    {% for p in result %}
+    <div class="row my-4">
+      <div class="col-md-6 ">
+        <img src="../static/imageuploads/{{p.filename}}" width="500" height="400" alt="...">
+      </div>
+      <div class="col-md-6 my-5 ">
+        <h1> {{ p.name }}</h1>
+        <p>{{ p.description }}</p>
+        <h3>Artist: {{  p.artist }}
+          <br>Album: {{  p.album }}</h3>
+        <audio controls>
+          <source src="../static/musicuploads/{{ p.audio }}" type="audio/mpeg">
+        </audio>
+        <a href="../static/musicuploads/{{ p.audio }}" download="song" > <button class="btn btn-primary" style="margin: 10%;">Download Music</button></a>
+       
+      </div>
+    </div>
+    {% endfor %}
+</body>
+</html>
