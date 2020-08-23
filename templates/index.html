@@ -34,7 +34,7 @@
 
     <div class="button">
       <a href="/search" class="btn btn-light mx-2"> Search your Fav song </a>
-      <a href="/uploadMusic" class="btn btn-light mx-2"> UPLOAD YOUR SONG</a>
+      <a href="/uploadMusic" class="btn btn-light mx-2"> UPLOAD SONGS</a>
 
     </div>
 
@@ -48,7 +48,7 @@
       {% for d in result %}
       <div class="row my-4">
         <div class="col-md-6 ">
-          <img src="../static/imageuploads/{{d.filename}}" width="500" height="400" alt="...">
+          <a href="/product/{{d.id}}"><img src="../static/imageuploads/{{d.filename}}" width="500" height="400" alt="..."></a>
         </div>
         <div class="col-md-6 my-5 ">
           <h1> {{ d.name }}</h1>

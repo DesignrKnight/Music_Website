@@ -66,7 +66,7 @@ def get_home_products():
 def get_products():
   all_products = Product.query.all()
   result = products_schema.dump(all_products)
-  return jsonify(result)
+  return render_template('playlist.html', result = result )
 
 
 # Get Single Products
@@ -155,7 +155,6 @@ def upload():
     new_product = Product(name, description, artist, album, audio, filename)
     db.session.add(new_product)
     db.session.commit()
-
     return render_template("complete.html", image_name=filename , audio_name=audio)
 
 
